@@ -1,12 +1,12 @@
-// app/api/contact/route.ts
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(request: Request) {
-  const body = await request.json();
-  console.log("Received contact:", body);
+  const { name, email, message } = await request.json();
 
-  return NextResponse.json({
-    message: 'Form received',
-    data: body,
+  const saved = await prisma.contact.create({
+    data: { name, email, message },
   });
+
+  return NextResponse.json({ message: "Saved to SQLite!", data: saved });
 }
